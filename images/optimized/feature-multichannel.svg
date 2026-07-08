@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="722" viewBox="0 0 900 722" role="img" aria-label="Multi-channel donations">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff8f0"/><stop offset="1" stop-color="#ffe0d1"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#a43318" flood-opacity=".16"/></filter>
+  </defs>
+  <rect width="900" height="722" rx="42" fill="url(#bg)"/>
+  <path d="M130 578c145-142 284-196 640-184" fill="none" stroke="#ff5528" stroke-width="24" stroke-linecap="round" opacity=".18"/>
+  <g filter="url(#shadow)"><rect x="120" y="185" width="205" height="350" rx="40" fill="#151515"/><rect x="142" y="222" width="161" height="256" rx="24" fill="#fff"/><circle cx="222" cy="502" r="14" fill="#ff5528"/></g>
+  <g filter="url(#shadow)"><rect x="376" y="240" width="270" height="176" rx="30" fill="#fff"/><rect x="376" y="284" width="270" height="48" fill="#ff5528"/><circle cx="430" cy="370" r="18" fill="#ff5528" opacity=".85"/><rect x="470" y="356" width="120" height="18" rx="9" fill="#286769" opacity=".8"/></g>
+  <g filter="url(#shadow)"><path d="M704 190 800 246v112l-96 56-96-56V246z" fill="#fff"/><path d="M704 226 768 264v76l-64 38-64-38v-76z" fill="#ff5528"/><path d="M704 252v100m-42-76 42 24 42-24" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <circle cx="450" cy="495" r="74" fill="#ff5528" filter="url(#shadow)"/><path d="M450 535s-58-34-58-76c0-24 19-43 43-43 13 0 25 6 33 16 8-10 20-16 33-16 24 0 43 19 43 43 0 42-58 76-58 76z" fill="#fff"/>
+  <g fill="none" stroke="#286769" stroke-width="14" stroke-linecap="round"><path d="M303 360c45 28 77 67 102 111"/><path d="M564 406c-37 20-66 43-87 72"/><path d="M661 381c-62 21-114 55-157 101"/></g>
+  <text x="450" y="640" fill="#151515" font-family="Arial,sans-serif" font-size="42" font-weight="800" text-anchor="middle">Give from anywhere</text>
+</svg>

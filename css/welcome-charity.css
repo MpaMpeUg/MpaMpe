@@ -234,11 +234,11 @@
 }
 
 .welcome-charity__icon--two {
-    background-color: rgba(224, 218, 245, 1);
+    background-color: rgba(var(--givewell-base-rgb), .16);
 }
 
 .welcome-charity__icon--two span {
-    color: #8139e7;
+    color: var(--givewell-primary);
 }
 
 
@@ -247,7 +247,7 @@
 }
 
 .welcome-charity__icon--three span {
-    color: #fca215;
+    color: var(--givewell-primary);
 }
 
 .welcome-charity__single:hover .welcome-charity__icon {
