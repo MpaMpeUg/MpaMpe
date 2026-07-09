@@ -23,8 +23,8 @@
   --givewell-font-three: "Libre Baskerville", serif;
   --givewell-gray: #7b7b7b;
   --givewell-gray-rgb: 123, 123, 123;
-  --givewell-base: #ff6600;
-  --givewell-base-rgb: 255, 102, 0;
+  --givewell-base: #ff5528;
+  --givewell-base-rgb: 255, 85, 40;
   --givewell-primary: hsl(182, 45%, 28%);
   --givewell-primary-rgb: 40, 103, 105;
   --givewell-black: #151515;
@@ -56,6 +56,64 @@ body {
 
 body.locked {
   overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.feature-three__img img,
+.about-three__img img,
+.case-three__img img,
+.gallery-one__img > img,
+.team-two__img img,
+.main-slider-three__img img {
+  height: auto;
+  object-fit: contain;
+}
+
+.case-three__img,
+.gallery-one__img {
+  background: var(--givewell-extra);
+}
+
+.case-three__img img,
+.gallery-one__img > img {
+  object-fit: cover;
+}
+
+.feature-three__img {
+  background: linear-gradient(135deg, #fff7f2 0%, #ffe3d6 100%);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 28px 24px 32px;
+}
+
+.feature-three__img img.feature-three__illustration {
+  display: block;
+  width: min(100%, 320px);
+  max-height: 260px;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.feature-three__single:hover .feature-three__img img.feature-three__illustration {
+  transform: scale(1.03) rotate(0deg);
+}
+
+.feature-three ul li:nth-child(3) .feature-three__icon span,
+.counter-one__list li:nth-child(3) .counter-one__icon span,
+.welcome-charity__icon--two span {
+  color: var(--givewell-primary);
+}
+
+.feature-three ul li:nth-child(3) .feature-three__count:before {
+  background-color: var(--givewell-primary);
+}
+
+.welcome-charity__icon--two {
+  background-color: rgba(var(--givewell-base-rgb), .16);
 }
 
 a {

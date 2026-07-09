@@ -23,41 +23,43 @@
 
 
 
-  var swiper = new Swiper(".swiper", {
-    effect: "coverflow",
-    grabCursor: true,
-    centeredSlides: true,
-    coverflowEffect: {
-      rotate: 0,
-      stretch: 0,
-      depth: 100,
-      modifier: 4,
-      slideShadows: true
-    },
-    loop: true,
-    // Navigation arrows
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
-    },
-    keyboard: {
-      enabled: true
-    },
-    mousewheel: {
-      thresholdDelta: 30
-    },
-    breakpoints: {
-      768: {
-        slidesPerView: 1.5
+  if (typeof Swiper !== "undefined" && $(".swiper").length) {
+    var swiper = new Swiper(".swiper", {
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      coverflowEffect: {
+        rotate: 0,
+        stretch: 0,
+        depth: 100,
+        modifier: 4,
+        slideShadows: true
       },
-      992: {
-        slidesPerView: 2.5
+      loop: true,
+      // Navigation arrows
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev"
       },
-      1290: {
-        slidesPerView: 3
+      keyboard: {
+        enabled: true
+      },
+      mousewheel: {
+        thresholdDelta: 30
+      },
+      breakpoints: {
+        768: {
+          slidesPerView: 1.5
+        },
+        992: {
+          slidesPerView: 2.5
+        },
+        1290: {
+          slidesPerView: 3
+        }
       }
-    }
-  });
+    });
+  }
 
 
   /*--------------------------------------------------------------
@@ -74,7 +76,7 @@
 
 
   // AOS Animation
-  if ($("[data-aos]").length) {
+  if (typeof AOS !== "undefined" && $("[data-aos]").length) {
     AOS.init({
       duration: '1200',
       disable: 'false',
@@ -637,7 +639,7 @@
   }
 
 
-  if ($("#shop-details-one__thumb").length) {
+  if (typeof Swiper !== "undefined" && $("#shop-details-one__thumb").length) {
     let testimonialsThumb = new Swiper("#shop-details-one__thumb", {
       slidesPerView: 3,
       spaceBetween: 0,
@@ -1016,7 +1018,7 @@
   }
 
 
-  if ($(".marquee_mode").length) {
+  if ($.fn.marquee && $(".marquee_mode").length) {
     $('.marquee_mode').marquee({
       speed: 30,
       gap: 0,
@@ -1337,6 +1339,10 @@
 
   // ===Portfolio===
   function projectMasonaryLayout() {
+    if (!$.fn.isotope) {
+      return;
+    }
+
     if ($(".masonary-layout").length) {
       $(".masonary-layout").isotope({
         layoutMode: "masonry"
@@ -1528,7 +1534,7 @@
 
 
   function testimonialBoxSlider() {
-    if ($(".testimonial-slider").length > 0) {
+    if (typeof Swiper !== "undefined" && $(".testimonial-slider").length > 0) {
       var testimonialSlider = new Swiper('.testimonial-slider', {
         mousewheel: true,
         height: 500,
@@ -1608,7 +1614,7 @@
 
   // Price Filter
   function priceFilter() {
-    if ($(".price-ranger").length) {
+    if ($.fn.slider && typeof wNumb !== "undefined" && $(".price-ranger").length) {
       $(".price-ranger #slider-range").slider({
         range: true,
         min: 50,
@@ -1658,11 +1664,19 @@
 
 
 
-  // window load event
-  $(window).on("load", function () {
+  function hidePreloader() {
     if ($(".preloader").length) {
       $(".preloader").fadeOut();
     }
+  }
+
+  $(function () {
+    setTimeout(hidePreloader, 900);
+  });
+
+  // window load event
+  $(window).on("load", function () {
+    hidePreloader();
 
     projectMasonaryLayout();
     fullHeight();
@@ -1673,7 +1687,7 @@
 
 
 
-    if ($(".post-filter").length) {
+    if ($.fn.isotope && $(".post-filter").length) {
       var postFilterList = $(".post-filter li");
       // for first init
       $(".filter-layout").isotope({

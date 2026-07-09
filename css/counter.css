@@ -82,7 +82,7 @@
 }
 
 .counter-one__list li:nth-child(3) .counter-one__icon span {
-    color: #8139e7;
+    color: var(--givewell-primary);
 }
 
 .counter-one__list li:nth-child(4) .counter-one__icon span {
