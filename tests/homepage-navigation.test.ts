@@ -14,7 +14,9 @@ describe("homepage navigation", () => {
 
     const visibleNavMarkup = navMarkup.replace(/<!--[\s\S]*?-->/g, "");
     const links = Array.from(
-      visibleNavMarkup.matchAll(/<a href="([^"]+)">\s*([^<]+?)\s*<\/a>/g),
+      visibleNavMarkup.matchAll(
+        /<a href="([^"]+)">\s*([^<]+?)\s*(?:<span[^>]*><\/span>)?<\/a>/g,
+      ),
       ([, href, label]) => ({ href, label: label.trim() }),
     );
 
@@ -76,5 +78,27 @@ describe("homepage navigation", () => {
       { href: "/campaigns", label: "Campaigns" },
       { href: "/mavericks", label: "Mavericks" },
     ]);
+  });
+
+  it("renders the desktop More control with a reliable chevron and mega-menu hook", () => {
+    const markup = renderToStaticMarkup(Home());
+
+    assert.match(markup, /<li class="dropdown more-mega-menu">/);
+    assert.match(
+      markup,
+      /<a href="\/mxm">More<span class="more-menu-chevron" aria-hidden="true"><\/span><\/a>/,
+    );
+  });
+
+  it("replaces the homepage search form with contact and sign-in actions", () => {
+    const markup = renderToStaticMarkup(Home());
+
+    assert.doesNotMatch(markup, /main-header-three__search-box/);
+    assert.match(markup, /href="tel:\+256757163101"/);
+    assert.match(markup, /href="mailto:info@mpampe\.com"/);
+    assert.match(
+      markup,
+      /href="\/dashboard" class="main-header-three__sign-in">Sign in<\/a>/,
+    );
   });
 });

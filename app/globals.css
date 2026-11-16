@@ -276,8 +276,36 @@ p {
   gap: 24px;
 }
 
+.top-strip-contact {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  white-space: nowrap;
+}
+
 .top-strip a:hover {
   color: var(--orange);
+}
+
+.top-strip .top-strip-sign-in {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 14px;
+  color: var(--white);
+  background: var(--orange);
+  border: 1px solid var(--orange);
+  border-radius: 999px;
+  font-weight: 700;
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+.top-strip .top-strip-sign-in:hover {
+  color: var(--ink);
+  background: var(--white);
+  border-color: var(--white);
 }
 
 .site-header {
@@ -377,8 +405,12 @@ p {
 }
 
 .nav-more summary svg {
+  display: block;
+  flex: 0 0 auto;
   width: 17px;
   height: 17px;
+  opacity: 1;
+  stroke: currentColor;
   transition: transform 180ms ease;
 }
 
@@ -396,19 +428,24 @@ p {
   position: absolute;
   z-index: 30;
   top: calc(100% - 18px);
-  right: -30px;
-  width: min(520px, calc(100vw - 40px));
-  padding: 14px;
+  right: -24px;
+  width: min(780px, calc(100vw - 32px));
+  padding: 18px;
   background: var(--white);
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 20px;
   box-shadow: var(--shadow);
+  transform-origin: top right;
+}
+
+.nav-more[open] .nav-more-menu {
+  animation: nav-more-in 180ms ease-out both;
 }
 
 .nav-menu .nav-more-menu ul {
   display: grid;
-  gap: 4px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .nav-menu .nav-more-menu li {
@@ -416,11 +453,14 @@ p {
 }
 
 .nav-menu .nav-more-menu a {
-  display: block;
-  padding: 10px 12px;
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 10px 13px;
   color: var(--ink);
   border-radius: 10px;
   font-size: 0.91rem;
+  line-height: 1.25;
 }
 
 .nav-menu .nav-more-menu a::after {
@@ -431,6 +471,18 @@ p {
 .nav-menu .nav-more-menu a.active {
   color: var(--orange);
   background: var(--orange-soft);
+}
+
+@keyframes nav-more-in {
+  from {
+    opacity: 0;
+    transform: translateY(9px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .nav-toggle {
@@ -3165,6 +3217,13 @@ legend {
 
   .top-strip-inner {
     justify-content: center;
+  }
+
+  .top-strip-contact {
+    width: 100%;
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.82rem;
   }
 
   .nav-toggle {

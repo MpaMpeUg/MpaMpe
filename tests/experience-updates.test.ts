@@ -80,4 +80,15 @@ describe("public experience updates", () => {
     assert.equal(ids.length, 2);
     assert.equal(new Set(ids).size, 2);
   });
+
+  it("keeps contact and sign-in actions visible across route headers", () => {
+    const headerSource = readFileSync("components/site-header.tsx", "utf8");
+
+    assert.match(headerSource, /href="tel:\+256757163101"/);
+    assert.match(headerSource, /href="mailto:info@mpampe\.com"/);
+    assert.match(
+      headerSource,
+      /className="top-strip-sign-in" href="\/dashboard"/,
+    );
+  });
 });

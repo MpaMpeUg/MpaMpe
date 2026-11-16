@@ -54,10 +54,10 @@ export function SiteHeader() {
           </span>
           <div className="top-strip-contact">
             <a href="tel:+256757163101">+256 757 163 101</a>
-            <span aria-hidden="true"> · </span>
             <a href="mailto:info@mpampe.com">info@mpampe.com</a>
-            <span aria-hidden="true"> · </span>
-            <Link href="/dashboard">Sign in</Link>
+            <Link className="top-strip-sign-in" href="/dashboard">
+              Sign in
+            </Link>
           </div>
         </div>
       </div>
@@ -101,7 +101,12 @@ export function SiteHeader() {
             <li className="nav-more-item">
               <details className="nav-more" ref={moreRef}>
                 <summary className={moreActive ? "active" : undefined}>
-                  More <ChevronDown aria-hidden="true" />
+                  More
+                  <ChevronDown
+                    className="nav-more-chevron"
+                    aria-hidden="true"
+                    strokeWidth={2.5}
+                  />
                 </summary>
                 <div className="nav-more-menu">
                   <ul>
