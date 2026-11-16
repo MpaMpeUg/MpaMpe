@@ -16,10 +16,34 @@ Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 Cross-Origin-Opener-Policy = "same-origin"
 
 [[headers]]
+for = "/fonts/*"
+
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
 for = "/images/*"
 
 [headers.values]
 Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/images/optimized/*"
+
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/css/*"
+
+[headers.values]
+Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+for = "/js/*"
+
+[headers.values]
+Cache-Control = "public, max-age=3600, must-revalidate"
 
 [[redirects]]
 from = "/index.html"
