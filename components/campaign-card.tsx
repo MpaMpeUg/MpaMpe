@@ -21,10 +21,12 @@ export function CampaignCard({
         aria-label={`View ${campaign.title}`}
       >
         <Image
+          className="campaign-card-image"
           src={campaign.image}
           alt={`${campaign.title} campaign`}
           fill
           priority={priority}
+          quality={82}
           sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
         />
         <span className={`status status-${campaign.status}`}>

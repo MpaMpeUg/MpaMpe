@@ -68,16 +68,21 @@ export default async function CampaignDetailPage({
         <div className="container campaign-detail-grid">
           <div className="campaign-detail-image">
             <Image
+              className="campaign-detail-photo"
               src={campaign.image}
               alt={`${campaign.title} campaign`}
               fill
               priority
+              quality={88}
               sizes="(max-width: 900px) 100vw, 50vw"
             />
           </div>
           <div className="campaign-detail-copy">
             <div className="campaign-detail-labels">
               <span className="eyebrow">{campaign.category}</span>
+              <span className={`campaign-detail-status campaign-detail-status-${campaign.status}`}>
+                {campaign.status.replace("-", " ")}
+              </span>
               {campaign.visibility === "private" ? <span className="private-campaign-badge">Private campaign</span> : null}
             </div>
             <h1>{campaign.title}</h1>
