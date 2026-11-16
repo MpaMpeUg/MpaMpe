@@ -19,6 +19,7 @@ const explore = [
 ];
 
 const community = [
+  ["/mxm", "MpaMpe Xmas Mission"],
   ["/mavericks", "MpaMpe Mavericks"],
   ["/partners", "Partner with us"],
   ["/events", "Events"],
@@ -31,8 +32,8 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="container footer-newsletter">
         <div>
-          <span className="eyebrow eyebrow-light">Stay close to the impact</span>
-          <h2>Campaign updates, community stories and ways to help.</h2>
+          <span className="eyebrow eyebrow-light">Email updates</span>
+          <h2>Receive campaign, event and volunteer notices.</h2>
         </div>
         <NewsletterForm />
       </div>
@@ -44,10 +45,7 @@ export function SiteFooter() {
             width={202}
             height={40}
           />
-          <p>
-            A giving platform helping people and communities reach more, raise
-            more and do more.
-          </p>
+          <p>Crowdfunding for reviewed campaigns in Uganda.</p>
           <div className="social-links" aria-label="MpaMpe social links">
             <a
               href="https://www.linkedin.com/in/mpampe-uganda-804414222/"

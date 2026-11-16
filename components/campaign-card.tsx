@@ -4,7 +4,13 @@ import Link from "next/link";
 import { campaignProgress, formatMoney } from "@/lib/format";
 import type { Campaign } from "@/lib/types";
 
-export function CampaignCard({ campaign }: { campaign: Campaign }) {
+export function CampaignCard({
+  campaign,
+  priority = false,
+}: {
+  campaign: Campaign;
+  priority?: boolean;
+}) {
   const progress = campaignProgress(campaign.raised, campaign.goal);
 
   return (
@@ -18,6 +24,7 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
           src={campaign.image}
           alt={`${campaign.title} campaign`}
           fill
+          priority={priority}
           sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
         />
         <span className={`status status-${campaign.status}`}>
@@ -49,7 +56,9 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
         </div>
         <div className="campaign-money">
           <strong>{formatMoney(campaign.raised)}</strong>
-          <span>raised of {formatMoney(campaign.goal)}</span>
+          <span>
+            {progress}% raised of {formatMoney(campaign.goal)}
+          </span>
         </div>
         <div className="campaign-footer">
           <span>

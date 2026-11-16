@@ -11,6 +11,14 @@ export function validationMessage(error: ZodError) {
   return `${field ? `${field}: ` : ""}${issue.message}`;
 }
 
+export async function parseJsonBody(request: Request) {
+  try {
+    return await request.json();
+  } catch {
+    return null;
+  }
+}
+
 export function clientIp(request: Request) {
   return (
     request.headers.get("x-nf-client-connection-ip") ||

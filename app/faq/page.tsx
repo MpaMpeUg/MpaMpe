@@ -48,7 +48,7 @@ export default function FaqPage() {
       />
       <section className="section">
         <div className="container narrow">
-          <div className="faq-list">
+          <div className="faq-list" data-reveal-stagger>
             {faqs.map(([question, answer]) => (
               <details key={question}>
                 <summary>{question}</summary>

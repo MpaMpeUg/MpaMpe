@@ -15,16 +15,16 @@ export default function PartnersPage() {
     <>
       <PageHero
         eyebrow="Partner with MpaMpe"
-        title="Bring resources, reach or expertise to community-led impact."
-        description="MpaMpe works with organizations that want to support trusted causes while strengthening transparency and community participation."
+        title="Partnership options for organizations."
+        description="Organizations can support campaigns through funding, matching, services, technology or volunteer teams."
       />
       <section className="section">
         <div className="container">
           <SectionHeading
             eyebrow="Ways to partner"
-            title="Build a partnership around the value you can contribute."
+            title="Choose a partnership type."
           />
-          <div className="value-grid">
+          <div className="value-grid" data-reveal-stagger>
             {[
               [
                 Building2,
@@ -62,8 +62,8 @@ export default function PartnersPage() {
       <section className="section-tight">
         <div className="container cta-band">
           <div>
-            <span className="eyebrow eyebrow-light">Start a conversation</span>
-            <h2>Tell us what kind of partnership you have in mind.</h2>
+            <span className="eyebrow eyebrow-light">Partnership enquiry</span>
+            <h2>Send your organization and proposal details.</h2>
           </div>
           <Link className="button" href="/contact">
             Contact partnerships

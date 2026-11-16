@@ -20,7 +20,7 @@ export const campaigns: Campaign[] = [
     ],
     category: "Education",
     location: "Kampala, Uganda",
-    image: "/images/campaign-oscar.webp",
+    image: "/images/campaign-oscar-actual.webp",
     goal: 3_500_000,
     raised: 3_500_000,
     supporters: 87,
@@ -30,6 +30,7 @@ export const campaigns: Campaign[] = [
     organizerType: "Verified campaign partner",
     verified: true,
     featured: true,
+    visibility: "public",
     endDate: "2023-10-18",
     budget: [{ label: "University tuition", amount: 3_500_000 }],
     updates: [
@@ -55,7 +56,7 @@ export const campaigns: Campaign[] = [
     ],
     category: "Medical",
     location: "Kampala, Uganda",
-    image: "/images/campaign-joel.webp",
+    image: "/images/campaign-joel-actual.webp",
     goal: 25_000_000,
     raised: 20_200_000,
     supporters: 320,
@@ -65,6 +66,7 @@ export const campaigns: Campaign[] = [
     organizerType: "Verified community campaign",
     verified: true,
     featured: true,
+    visibility: "public",
     endDate: "2024-11-15",
     budget: [
       { label: "Medical procedure and hospital care", amount: 18_500_000 },
@@ -80,42 +82,43 @@ export const campaigns: Campaign[] = [
     ],
   },
   {
-    id: "camp_mavericks",
-    slug: "equip-mpampe-mavericks",
-    title: "Equip MpaMpe Mavericks for Community Impact",
-    shortTitle: "Equip the Mavericks",
+    id: "camp_mxm_2026",
+    slug: "mxm-2026-christmas-mission",
+    title: "MpaMpe Xmas Mission 2026: Let Every Child Smile",
+    shortTitle: "MxM 2026",
     summary:
-      "Help volunteers reach communities, document needs responsibly and amplify verified campaigns.",
+      "Help MpaMpe spread love, hope and joy to children and families in marginalised communities this Christmas.",
     story: [
-      "MpaMpe Mavericks are volunteers who support campaign storytelling, community outreach, events, technology and field activities.",
-      "This campaign will provide training materials, identification, transport support and basic storytelling equipment for supervised community work.",
-      "Every contribution helps volunteers serve more safely, consistently and effectively.",
+      "MpaMpe Xmas Mission 2026 is a community mission to make Christmas brighter for children and families in marginalised communities.",
+      "Supporters can contribute clothes, shoes, scholastic materials, food items or money. Volunteers can also join the Mavericks team to help prepare, distribute and document support responsibly.",
+      "Every contribution counts and every act of kindness matters. Together, we can reach more, raise more and do more.",
     ],
     category: "Community",
     location: "Uganda",
-    image: "/images/hero.webp",
-    goal: 15_000_000,
-    raised: 6_450_000,
-    supporters: 112,
+    image: "/images/mxm-2025/01.webp",
+    goal: 10_000_000,
+    raised: 0,
+    supporters: 0,
     currency: "UGX",
     status: "active",
     organizer: "MpaMpe Foundation",
     organizerType: "Platform campaign",
     verified: true,
     featured: true,
-    endDate: "2026-09-30",
+    visibility: "public",
+    endDate: "2026-12-20",
     budget: [
-      { label: "Volunteer orientation and safeguarding", amount: 3_000_000 },
-      { label: "Community field support", amount: 6_000_000 },
-      { label: "Storytelling and identification kits", amount: 4_500_000 },
-      { label: "Monitoring and recognition", amount: 1_500_000 },
+      { label: "Food, treats and family support", amount: 4_000_000 },
+      { label: "Scholastic and hygiene materials", amount: 2_500_000 },
+      { label: "Community transport and distribution", amount: 2_000_000 },
+      { label: "Volunteer safeguarding and coordination", amount: 1_500_000 },
     ],
     updates: [
       {
-        id: "update_mavericks_1",
-        title: "First orientation cohort planned",
-        body: "The next Mavericks orientation will cover safeguarding, campaign ethics and responsible digital advocacy.",
-        publishedAt: "2026-06-15",
+        id: "update_mxm_2026_1",
+        title: "The MxM 2026 call is open",
+        body: "Donate, volunteer or register for mission updates as MpaMpe prepares to bring Christmas support to more families.",
+        publishedAt: "2026-11-14",
       },
     ],
   },
@@ -162,31 +165,54 @@ export const maverickOpportunities: MaverickOpportunity[] = [
 
 export const stories: Story[] = [
   {
-    slug: "what-oscar-taught-us",
-    title: "What Oscar's eight-day campaign taught us about community",
+    slug: "oscar-tuition-campaign",
+    title: "Eight days of giving: how Oscar's tuition goal was reached",
     excerpt:
-      "A clear need, a trusted story and a determined student community became MpaMpe's first major proof point.",
+      "MpaMpe's 2023 pilot brought the Makerere community together to raise UGX 3.5 million for Oscar Nigyema's tuition.",
+    body: [
+      "Oscar Nigyema was pursuing an Economics degree at Makerere University when tuition pressure threatened to interrupt his studies.",
+      "The campaign set a clear UGX 3.5 million goal and invited the university community to rally around a specific, verified need. Eight days later, the full target had been raised by 87 supporters.",
+      "Oscar's campaign became MpaMpe's first major proof that trusted digital storytelling can turn a community's care into practical support. It also shaped the platform's approach to campaign review, budgeting and transparent updates.",
+    ],
     image: "/images/campaign-oscar.webp",
-    date: "2026-05-18",
-    category: "Campaign lessons",
+    date: "2023-10-18",
+    category: "Education campaign",
+    sourceHref: "https://www.youtube.com/watch?v=fbus6frL04Q",
+    sourceLabel: "Watch Oscar's campaign story",
   },
   {
-    slug: "mavericks-community-service",
-    title: "Mavericks: volunteering that moves beyond the share button",
+    slug: "joel-heart-surgery",
+    title: "10 Hearts for Joel: a community helped make surgery possible",
     excerpt:
-      "The volunteer community is creating a practical bridge between online campaigns and people on the ground.",
-    image: "/images/mavericks.webp",
-    date: "2026-06-02",
-    category: "Community",
+      "The MpaMpe community raised UGX 20,260,500 before Joel Mugisha's successful heart surgery.",
+    body: [
+      "Joel Mugisha, a mechanical engineering student, needed urgent specialist care for a serious heart condition. His family and university community needed a trusted way to coordinate support.",
+      "Through the 10 Hearts for Joel campaign, supporters shared Joel's story, contributed and kept the appeal moving. Before surgery began, the community had raised UGX 20,260,500 toward the UGX 25 million goal.",
+      "Joel later shared his gratitude after a successful surgery. MpaMpe also recognised the Mulago Heart Institute and friends who helped subsidise and clear the remaining balance.",
+    ],
+    image: "/images/campaign-joel.webp",
+    date: "2024-11-20",
+    category: "Medical campaign",
+    sourceHref:
+      "https://www.linkedin.com/posts/mpampe_10hearts4joel-togetherwecan-mpampe-activity-7286696050592014336-m-8K",
+    sourceLabel: "Read Joel's campaign update",
   },
   {
-    slug: "building-trust-into-giving",
-    title: "Why transparent campaign updates matter",
+    slug: "mxm-2025-impact",
+    title: "MxM 2025: 254 people reached through one Christmas mission",
     excerpt:
-      "Donors deserve to see more than a progress bar. Updates turn a transaction into accountable participation.",
-    image: "/images/impact-2.webp",
-    date: "2026-06-12",
-    category: "Trust",
+      "Seventeen Mavericks and a generous community brought clothing, shoes, food, hygiene support and celebration to Makerere Kivulu.",
+    body: [
+      "MpaMpe Xmas Mission 2025 brought 17 Mavericks to Makerere Kivulu to share practical support and festive joy with children and families.",
+      "In two weeks, the community raised UGX 520,000. The mission distributed women's, men's and baby clothing packs, 101 pairs of shoes, sanitary pads for 30 women, food and treats, and four large Christmas gift hampers.",
+      "In total, 254 people were reached. The day also made room for games, dancing, shared meals and the human connections at the heart of the mission's theme: Let Every Child Smile.",
+    ],
+    image: "/images/IMG-20251130-WA0102.jpg",
+    date: "2025-12-20",
+    category: "Community mission",
+    sourceHref:
+      "https://www.linkedin.com/feed/update/urn:li:activity:7409317333971763200",
+    sourceLabel: "Read the original MxM impact update",
   },
 ];
 
@@ -217,3 +243,43 @@ export const impactStats = [
   { value: "UGX 30M+", label: "community support coordinated" },
   { value: "1", label: "growing Mavericks community" },
 ];
+
+export const mxmGalleryImages = [
+  { src: "/images/mxm-2025/01.webp", alt: "MpaMpe Mavericks gathered for the 2025 Xmas Mission" },
+  { src: "/images/mxm-2025/02.webp", alt: "MpaMpe Xmas Mission celebration cake" },
+  { src: "/images/mxm-2025/03.webp", alt: "MpaMpe Mavericks preparing for community activities" },
+  { src: "/images/mxm-2025/04.webp", alt: "Children gathered during the MpaMpe Xmas Mission" },
+  { src: "/images/mxm-2025/05.webp", alt: "MpaMpe Mavericks sharing food and gifts" },
+  { src: "/images/mxm-2025/06.webp", alt: "A MpaMpe Maverick welcoming community members" },
+  { src: "/images/mxm-2025/07.webp", alt: "A volunteer presenting a Christmas gift hamper" },
+  { src: "/images/mxm-2025/08.webp", alt: "MpaMpe volunteers speaking with community members" },
+  { src: "/images/mxm-2025/09.webp", alt: "A community member meeting a MpaMpe Maverick" },
+  { src: "/images/mxm-2025/10.webp", alt: "MpaMpe volunteers coordinating the mission day" },
+  { src: "/images/mxm-2025/11.webp", alt: "MpaMpe Mavericks in front of the Xmas Mission banner" },
+  { src: "/images/mxm-2025/12.webp", alt: "MpaMpe Mavericks celebrating a successful mission" },
+] as const;
+
+const pixPngImages = new Set([35, 40, 41]);
+
+export const pixGalleryImages = Array.from({ length: 48 }, (_, index) => {
+  const photoNumber = index + 1;
+  const extension = pixPngImages.has(photoNumber) ? "png" : "jpg";
+
+  return {
+    src: `/images/gallery/pix/pix-${String(photoNumber).padStart(3, "0")}.${extension}`,
+    alt: `MpaMpe community photo ${photoNumber}`,
+  };
+});
+
+export const galleryImages = [
+  ...pixGalleryImages,
+  {
+    src: "/images/campaign-oscar-actual.webp",
+    alt: "MpaMpe team with Oscar after his education campaign",
+  },
+  {
+    src: "/images/campaign-joel-actual.webp",
+    alt: "MpaMpe team during Joel's medical support campaign",
+  },
+  ...mxmGalleryImages,
+] as const;

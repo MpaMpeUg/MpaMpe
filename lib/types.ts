@@ -24,9 +24,12 @@ export type Campaign = {
   organizerType: string;
   verified: boolean;
   featured: boolean;
+  visibility: "public" | "private";
+  shareToken?: string;
   endDate: string | null;
   updates: CampaignUpdate[];
   budget: { label: string; amount: number }[];
+  backers?: Backer[];
 };
 
 export type CampaignUpdate = {
@@ -34,6 +37,28 @@ export type CampaignUpdate = {
   title: string;
   body: string;
   publishedAt: string;
+};
+
+export type Backer = {
+  id: string;
+  campaignSlug: string;
+  displayName: string;
+  amount: number;
+  currency: "UGX";
+  anonymous: boolean;
+  createdAt: string;
+};
+
+export type Pledge = {
+  id: string;
+  campaignSlug: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  amount?: number;
+  message?: string;
+  anonymous: boolean;
+  createdAt: string;
 };
 
 export type MaverickOpportunity = {
@@ -52,9 +77,12 @@ export type Story = {
   slug: string;
   title: string;
   excerpt: string;
+  body?: string[];
   image: string;
   date: string;
   category: string;
+  sourceHref?: string;
+  sourceLabel?: string;
 };
 
 export type Event = {

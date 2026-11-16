@@ -37,6 +37,9 @@
   ],
   "exclude": [
     "node_modules",
-    "legacy-site"
+    "public",
+    "legacy-site",
+    ".next/types/app/route.ts",
+    ".next/dev/types/app/route.ts"
   ]
 }

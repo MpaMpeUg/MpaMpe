@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { stories } from "@/lib/data";
 import { formatDate } from "@/lib/format";
@@ -15,27 +17,30 @@ export default function StoriesPage() {
     <>
       <PageHero
         eyebrow="Stories & updates"
-        title="The lessons, people and progress behind the platform."
-        description="Follow campaign outcomes, Mavericks community stories and what MpaMpe is learning about trusted digital giving."
+        title="Campaign results and MpaMpe updates."
+        description="Read completed campaign reports, Mavericks updates and platform announcements."
       />
       <section className="section">
-        <div className="container story-grid">
+        <div className="container story-grid" data-reveal-stagger>
           {stories.map((story) => (
             <article className="story-card" key={story.slug}>
-              <div className="story-image">
+              <Link className="story-image" href={`/blog/${story.slug}`}>
                 <Image
                   src={story.image}
                   alt=""
                   fill
                   sizes="(max-width: 680px) 100vw, 33vw"
                 />
-              </div>
+              </Link>
               <div className="story-content">
                 <span className="story-meta">
                   {story.category} · {formatDate(story.date)}
                 </span>
-                <h3>{story.title}</h3>
+                <h3><Link href={`/blog/${story.slug}`}>{story.title}</Link></h3>
                 <p>{story.excerpt}</p>
+                <Link className="card-link" href={`/blog/${story.slug}`}>
+                  Read update <ArrowRight />
+                </Link>
               </div>
             </article>
           ))}

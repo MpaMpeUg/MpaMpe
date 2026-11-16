@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { AuthPanel } from "@/components/auth-panel";
+import { CreatorDashboard } from "@/components/creator-dashboard";
 import { PageHero } from "@/components/page-hero";
+import { getCreatorDashboardData } from "@/lib/creator-dashboard-repository";
+import { getCurrentSupabaseUser } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Your Dashboard",
@@ -8,17 +11,36 @@ export const metadata: Metadata = {
     "Sign in to your MpaMpe donor, campaign organizer or Maverick dashboard.",
 };
 
-export default function DashboardPage() {
+export const dynamic = "force-dynamic";
+
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const requested = (await searchParams).next;
+  const nextPath =
+    requested?.startsWith("/") && !requested.startsWith("//")
+      ? requested
+      : "/dashboard";
+  const user = await getCurrentSupabaseUser();
+  const dashboardData = user
+    ? await getCreatorDashboardData(user.id, user.email || "")
+    : null;
   return (
     <>
       <PageHero
         eyebrow="Your MpaMpe"
         title="Keep your giving and community activity in one place."
-        description="Accounts are powered by Netlify Identity and become active on configured preview and production deployments."
+        description="Sign in to follow your giving, prepare trusted campaigns and stay connected to the communities you support."
       />
-      <section className="section section-muted">
+      <section id="account" className="section section-muted">
         <div className="container">
-          <AuthPanel />
+          {dashboardData ? (
+            <CreatorDashboard data={dashboardData} />
+          ) : (
+            <AuthPanel nextPath={nextPath} />
+          )}
         </div>
       </section>
     </>

@@ -1,76 +1,106 @@
 "use client";
 
+import type { User } from "@supabase/supabase-js";
 import {
-  AuthError,
-  getUser,
-  handleAuthCallback,
-  login,
-  logout,
-  onAuthChange,
-  signup,
-  type User,
-} from "@netlify/identity";
-import { FormEvent, useEffect, useState } from "react";
+  CheckCircle2,
+  HeartHandshake,
+  LockKeyhole,
+  Mail,
+  UserRound,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { authenticatedUserFromResponse } from "@/lib/auth-state";
+import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import { useToast } from "@/components/toast-provider";
 
-export function AuthPanel() {
+export function AuthPanel({ nextPath = "/dashboard" }: { nextPath?: string }) {
+  const router = useRouter();
+  const toast = useToast();
+  const supabase = useMemo(() => createBrowserSupabaseClient(), []);
+  const missingConfigMessage =
+    "Supabase Auth is not configured locally yet. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY to .env.local to enable signups.";
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(Boolean(supabase));
   const [mode, setMode] = useState<"login" | "signup">("login");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(supabase ? "" : missingConfigMessage);
 
   useEffect(() => {
-    let active = true;
-    void (async () => {
-      try {
-        await handleAuthCallback();
-        const current = await getUser();
-        if (active) setUser(current);
-      } catch {
-        if (active) {
-          setMessage(
-            "Account sign-in becomes available on a configured Netlify preview or production deployment.",
-          );
-        }
-      } finally {
-        if (active) setLoading(false);
-      }
-    })();
+    if (!supabase) {
+      return;
+    }
 
-    const unsubscribe = onAuthChange((_event, current) => {
-      if (active) setUser(current);
+    let active = true;
+    void supabase.auth.getUser().then(({ data }) => {
+      if (active) {
+        setUser(data.user);
+        setLoading(false);
+      }
     });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (active) setUser(session?.user ?? null);
+    });
+
     return () => {
       active = false;
-      unsubscribe();
+      subscription.unsubscribe();
     };
-  }, []);
+  }, [supabase]);
+
+  useEffect(() => {
+    if (!user) return;
+    router.replace(nextPath);
+    router.refresh();
+  }, [nextPath, router, user]);
 
   async function authenticate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!supabase) {
+      setMessage("Supabase Auth keys are missing in this local environment.");
+      return;
+    }
+
     const form = event.currentTarget;
     const data = new FormData(form);
     const email = String(data.get("email") ?? "");
     const password = String(data.get("password") ?? "");
     const name = String(data.get("name") ?? "");
+
     setMessage(mode === "login" ? "Signing in…" : "Creating account…");
 
-    try {
-      const current =
-        mode === "login"
-          ? await login(email, password)
-          : await signup(email, password, { full_name: name });
-      setUser(current);
-      setMessage(
-        current.confirmedAt
-          ? "Welcome to your MpaMpe dashboard."
-          : "Check your email to confirm your account.",
-      );
-    } catch (error) {
-      setMessage(
-        error instanceof AuthError
-          ? error.message
-          : "Sign-in is not configured in this environment yet.",
-      );
+    const result =
+      mode === "login"
+        ? await supabase.auth.signInWithPassword({ email, password })
+        : await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { full_name: name },
+              emailRedirectTo: `${window.location.origin}/auth/confirm?next=${encodeURIComponent(nextPath)}`,
+            },
+          });
+
+    if (result.error) {
+      setMessage(result.error.message);
+      toast({ title: mode === "login" ? "Sign in failed" : "Account not created", message: result.error.message, tone: "error" });
+      return;
+    }
+
+    setUser(authenticatedUserFromResponse(result.data));
+    setMessage(
+      mode === "signup"
+        ? "Account created. Check your email to confirm your MpaMpe account."
+        : "Welcome to your MpaMpe dashboard.",
+    );
+    if (mode === "login" && result.data.session) {
+      toast({ title: "Welcome back", message: "You are now signed in.", tone: "success" });
+      router.push(nextPath);
+      router.refresh();
+    } else if (mode === "signup") {
+      toast({ title: "Account created", message: "Check your email to confirm your account.", tone: "success" });
     }
   }
 
@@ -79,117 +109,114 @@ export function AuthPanel() {
   }
 
   if (user) {
-    const roles = user.roles?.length ? user.roles : ["member"];
-    return (
-      <div className="dashboard-shell">
-        <aside className="dashboard-nav">
-          <span className="eyebrow">Your account</span>
-          <h2 style={{ marginTop: 12, fontSize: "1.7rem" }}>
-            {user.name || user.email}
-          </h2>
-          <ul>
-            <li>
-              <a href="#overview">Overview</a>
-            </li>
-            <li>
-              <a href="#donations">Donations</a>
-            </li>
-            <li>
-              <a href="#campaigns">Campaigns</a>
-            </li>
-            <li>
-              <a href="#mavericks">Mavericks</a>
-            </li>
-          </ul>
-          <button
-            className="button button-secondary button-full"
-            style={{ marginTop: 22 }}
-            onClick={async () => {
-              await logout();
-              setUser(null);
-            }}
-          >
-            Sign out
-          </button>
-        </aside>
-        <section className="dashboard-content" id="overview">
-          <span className="eyebrow">Dashboard</span>
-          <h1 style={{ marginTop: 12, fontSize: "2.6rem", color: "var(--teal-dark)" }}>
-            Welcome back.
-          </h1>
-          <p style={{ marginTop: 16, color: "var(--muted)" }}>
-            Roles: {roles.join(", ")}. Donation history, campaign applications,
-            Maverick assignments and receipts will appear here as live records
-            are connected.
-          </p>
-          <div className="admin-stats">
-            <div className="admin-stat">
-              <strong>0</strong>
-              <span>Donations</span>
-            </div>
-            <div className="admin-stat">
-              <strong>0</strong>
-              <span>Campaigns</span>
-            </div>
-            <div className="admin-stat">
-              <strong>0</strong>
-              <span>Assignments</span>
-            </div>
-            <div className="admin-stat">
-              <strong>0</strong>
-              <span>Receipts</span>
-            </div>
-          </div>
-        </section>
-      </div>
-    );
+    return <div className="form-card">Opening your dashboard…</div>;
   }
 
   return (
-    <div className="two-column">
-      <div className="content-panel">
-        <span className="eyebrow">MpaMpe account</span>
-        <h2>One account for giving, campaigning and volunteering.</h2>
+    <div className="auth-shell">
+      <div className="auth-intro" data-reveal>
+        <div className="auth-intro-icon" aria-hidden="true">
+          <HeartHandshake />
+        </div>
+        <span className="eyebrow">Your MpaMpe account</span>
+        <h2>One place for giving, campaigning and volunteering.</h2>
         <p>
-          Sign in to view donation confirmations, campaign applications,
-          Maverick opportunities and account updates.
+          Join a community built around trusted stories, transparent support and
+          practical impact.
         </p>
+        <ul className="auth-benefits">
+          <li><CheckCircle2 /> Follow your giving and campaign activity</li>
+          <li><CheckCircle2 /> Prepare and manage campaign applications</li>
+          <li><CheckCircle2 /> Stay connected to Mavericks opportunities</li>
+        </ul>
       </div>
-      <form className="form-card" onSubmit={authenticate}>
-        {mode === "signup" ? (
+      <div className="auth-card" data-reveal>
+        <div className="auth-mode-tabs" role="tablist" aria-label="Account action">
+          <button
+            className={mode === "login" ? "active" : undefined}
+            type="button"
+            role="tab"
+            aria-selected={mode === "login"}
+            onClick={() => setMode("login")}
+          >
+            Sign in
+          </button>
+          <button
+            className={mode === "signup" ? "active" : undefined}
+            type="button"
+            role="tab"
+            aria-selected={mode === "signup"}
+            onClick={() => setMode("signup")}
+          >
+            Create account
+          </button>
+        </div>
+        <div className="auth-card-heading">
+          <span>{mode === "login" ? "Welcome back" : "Join MpaMpe"}</span>
+          <h2>{mode === "login" ? "Sign in to continue." : "Create your account."}</h2>
+          <p>
+            {mode === "login"
+              ? "Access your campaigns, giving activity and settings."
+              : "Start giving, organising campaigns or volunteering with the community."}
+          </p>
+        </div>
+        <form className="auth-form" onSubmit={authenticate}>
+          {mode === "signup" ? (
+            <label>
+              Full name
+              <span className="auth-input">
+                <UserRound aria-hidden="true" />
+                <input
+                  name="name"
+                  autoComplete="name"
+                  placeholder="Your full name"
+                  required
+                />
+              </span>
+            </label>
+          ) : null}
           <label>
-            Full name
-            <input name="name" autoComplete="name" required />
+            Email address
+            <span className="auth-input">
+              <Mail aria-hidden="true" />
+              <input
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                required
+              />
+            </span>
           </label>
-        ) : null}
-        <label>
-          Email
-          <input name="email" type="email" autoComplete="email" required />
-        </label>
-        <label>
-          Password
-          <input
-            name="password"
-            type="password"
-            minLength={8}
-            autoComplete={mode === "login" ? "current-password" : "new-password"}
-            required
-          />
-        </label>
-        <button className="button" type="submit">
-          {mode === "login" ? "Sign in" : "Create account"}
-        </button>
-        <button
-          className="text-link"
-          type="button"
-          onClick={() => setMode(mode === "login" ? "signup" : "login")}
-        >
-          {mode === "login"
-            ? "New to MpaMpe? Create an account"
-            : "Already have an account? Sign in"}
-        </button>
-        {message ? <p className="form-notice">{message}</p> : null}
-      </form>
+          <label>
+            Password
+            <span className="auth-input">
+              <LockKeyhole aria-hidden="true" />
+              <input
+                name="password"
+                type="password"
+                minLength={8}
+                autoComplete={mode === "login" ? "current-password" : "new-password"}
+                placeholder="At least 8 characters"
+                required
+              />
+            </span>
+          </label>
+          <button className="button button-full" type="submit">
+            {mode === "login" ? "Sign in" : "Create account"}
+          </button>
+          <button
+            className="auth-switch"
+            type="button"
+            onClick={() => setMode(mode === "login" ? "signup" : "login")}
+          >
+            {mode === "login"
+              ? "New to MpaMpe? Create an account"
+              : "Already have an account? Sign in"}
+          </button>
+          {message ? <p className="form-notice">{message}</p> : null}
+        </form>
+      </div>
     </div>
   );
 }

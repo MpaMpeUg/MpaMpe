@@ -19,9 +19,9 @@ export default function ContactPage() {
       />
       <section className="section">
         <div className="container two-column">
-          <div className="content-panel">
+          <div className="content-panel" data-reveal>
             <span className="eyebrow">Reach the team</span>
-            <h2>We are here to help you find the next step.</h2>
+            <h2>Contact details and response times.</h2>
             <p>
               For payment concerns, include the campaign name, amount, date and
               payment reference. Never send a PIN or password.
@@ -41,7 +41,7 @@ export default function ContactPage() {
               </div>
             </div>
           </div>
-          <ContactForm />
+          <div data-reveal><ContactForm /></div>
         </div>
       </section>
     </>

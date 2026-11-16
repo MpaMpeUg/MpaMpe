@@ -1,4 +1,3 @@
-import crypto from "node:crypto";
 import { getSql } from "@/lib/db";
 import { jsonError } from "@/lib/http";
 import { verifyWebhook } from "@/lib/payments";
@@ -8,11 +7,28 @@ type PaymentEvent = {
   reference?: string;
   type?: string;
   status?: string;
+  event?: string;
+  data?: {
+    id?: string | number;
+    tx_ref?: string;
+    status?: string;
+  };
 };
+
+function normalizePaymentEvent(event: PaymentEvent) {
+  return {
+    id: event.id || event.data?.id?.toString(),
+    reference: event.reference || event.data?.tx_ref,
+    type: event.type || event.event,
+    status: event.status || event.data?.status,
+  };
+}
 
 export async function POST(request: Request) {
   const rawBody = await request.text();
-  const signature = request.headers.get("x-payment-signature");
+  const signature =
+    request.headers.get("x-payment-signature") ||
+    request.headers.get("verif-hash");
   if (!verifyWebhook(rawBody, signature)) {
     return jsonError("Invalid webhook signature.", 401);
   }
@@ -24,7 +40,9 @@ export async function POST(request: Request) {
     return jsonError("Invalid webhook payload.");
   }
 
-  if (!event.reference || !event.type) {
+  const normalized = normalizePaymentEvent(event);
+
+  if (!normalized.reference || !normalized.type) {
     return jsonError("Missing payment event fields.");
   }
 
@@ -33,20 +51,23 @@ export async function POST(request: Request) {
     return jsonError("Payment storage is not configured.", 503);
   }
 
-  const eventId = event.id || crypto.randomUUID();
+  const provider = process.env.PAYMENT_PROVIDER || "configured";
+  const eventId =
+    normalized.id ||
+    `${provider}:${normalized.reference}:${normalized.type}`;
   const inserted = await sql`
     insert into payment_events (
       id, provider, provider_reference, event_type, payload, processed_at
     )
     values (
       ${eventId},
-      ${process.env.PAYMENT_PROVIDER || "configured"},
-      ${event.reference},
-      ${event.type},
+      ${provider},
+      ${normalized.reference},
+      ${normalized.type},
       ${sql.json(event as Parameters<typeof sql.json>[0])},
       now()
     )
-    on conflict (provider_reference) do nothing
+    on conflict (provider, provider_reference, event_type) do nothing
     returning id
   `;
 
@@ -55,19 +76,30 @@ export async function POST(request: Request) {
   }
 
   const normalizedStatus =
-    event.status === "successful"
+    normalized.status === "successful"
       ? "successful"
-      : event.status === "failed"
+      : normalized.status === "failed"
         ? "failed"
-        : event.status === "reversed"
+        : normalized.status === "reversed"
           ? "reversed"
           : "pending";
 
-  await sql`
+  const updated = await sql`
     update donations
-    set status = ${normalizedStatus}, updated_at = now()
-    where provider_reference = ${event.reference}
+    set
+      status = ${normalizedStatus},
+      confirmed_at = case
+        when ${normalizedStatus} in ('successful', 'completed') then now()
+        else confirmed_at
+      end,
+      updated_at = now()
+    where provider_reference = ${normalized.reference}
+    returning campaign_slug
   `;
+
+  if (updated.length) {
+    await sql`select public.refresh_campaign_totals(${updated[0].campaign_slug})`;
+  }
 
   return Response.json({ received: true });
 }

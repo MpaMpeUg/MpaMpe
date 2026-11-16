@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { CheckCircle2, ClipboardCheck, FileText, ShieldCheck } from "lucide-react";
 import { CampaignApplicationForm } from "@/components/campaign-application-form";
 import { PageHero } from "@/components/page-hero";
+import { campaignCreationRedirect } from "@/lib/auth-state";
+import { getCurrentSupabaseUser } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Start a Campaign",
@@ -9,7 +12,12 @@ export const metadata: Metadata = {
     "Learn the MpaMpe campaign requirements and submit a campaign for initial review.",
 };
 
-export default function StartCampaignPage() {
+export const dynamic = "force-dynamic";
+
+export default async function StartCampaignPage() {
+  const destination = campaignCreationRedirect(await getCurrentSupabaseUser());
+  if (destination) redirect(destination);
+
   return (
     <>
       <PageHero
@@ -19,7 +27,7 @@ export default function StartCampaignPage() {
       />
       <section className="section">
         <div className="container two-column">
-          <div className="content-panel">
+          <div className="content-panel" data-reveal>
             <span className="eyebrow">Before you apply</span>
             <h2>Prepare the essentials.</h2>
             <p>
@@ -70,7 +78,7 @@ export default function StartCampaignPage() {
               </li>
             </ul>
           </div>
-          <CampaignApplicationForm />
+          <div data-reveal><CampaignApplicationForm /></div>
         </div>
       </section>
     </>

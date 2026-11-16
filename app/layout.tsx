@@ -1,9 +1,30 @@
 import type { Metadata, Viewport } from "next";
+import { Caveat, DM_Sans, Libre_Baskerville } from "next/font/google";
 import "@/app/globals.css";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
+import { MotionProvider } from "@/components/motion-provider";
+import { SiteChrome } from "@/components/site-chrome";
+import { ToastProvider } from "@/components/toast-provider";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mpampe.com";
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-dm-sans",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-caveat",
+});
+
+const libreBaskerville = Libre_Baskerville({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-libre-baskerville",
+  weight: ["400", "700"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -31,7 +52,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#286769",
+  themeColor: "#ff5528",
   colorScheme: "light",
 };
 
@@ -39,11 +60,15 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body>
-        <SiteHeader />
-        <main id="main-content">{children}</main>
-        <SiteFooter />
+    <html lang="en" data-scroll-behavior="smooth">
+      <body
+        className={`${dmSans.variable} ${caveat.variable} ${libreBaskerville.variable} custom-cursor`}
+        suppressHydrationWarning
+      >
+        <MotionProvider />
+        <ToastProvider>
+          <SiteChrome>{children}</SiteChrome>
+        </ToastProvider>
       </body>
     </html>
   );

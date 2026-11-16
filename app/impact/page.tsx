@@ -15,11 +15,11 @@ export default function ImpactPage() {
     <>
       <PageHero
         eyebrow="Our impact"
-        title="Beyond money raised: what changed?"
-        description="MpaMpe is building impact reporting around verified support, funds disbursed, community participation and campaign outcomes."
+        title="Campaign results and verified totals."
+        description="View confirmed support, completed campaigns and reported outcomes."
       />
       <section className="section">
-        <div className="container impact-strip-inner">
+        <div className="container impact-strip-inner" data-reveal-stagger>
           {impactStats.map((stat) => (
             <div className="impact-stat" key={stat.label}>
               <strong>{stat.value}</strong>
@@ -30,7 +30,7 @@ export default function ImpactPage() {
       </section>
       <section className="section section-muted">
         <div className="container split-section">
-          <div className="content-panel">
+          <div className="content-panel" data-reveal>
             <span className="eyebrow">Reporting with context</span>
             <h2>Every number should connect to a real outcome.</h2>
             <p>
@@ -62,7 +62,7 @@ export default function ImpactPage() {
               </li>
             </ul>
           </div>
-          <div className="gallery-grid">
+          <div className="gallery-grid" data-reveal-stagger>
             {["/images/impact-1.webp", "/images/impact-2.webp", "/images/impact-3.webp"].map(
               (image, index) => (
                 <div className="gallery-tile" key={image}>
@@ -81,8 +81,8 @@ export default function ImpactPage() {
       <section className="section-tight">
         <div className="container cta-band">
           <div>
-            <span className="eyebrow eyebrow-light">Create the next result</span>
-            <h2>Join a campaign already moving.</h2>
+            <span className="eyebrow eyebrow-light">Current campaigns</span>
+            <h2>View campaigns accepting support.</h2>
           </div>
           <Link className="button" href="/campaigns">
             Explore campaigns

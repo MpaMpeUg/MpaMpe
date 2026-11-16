@@ -15,15 +15,15 @@ export default function EventsPage() {
     <>
       <PageHero
         eyebrow="Events"
-        title="Learn, connect and serve with the MpaMpe community."
-        description="Discover upcoming orientations, campaign workshops, community missions and partner events."
+        title="Upcoming MpaMpe events."
+        description="View orientations, campaign workshops, community missions and partner events."
       />
       <section className="section">
-        <div className="container opportunity-grid">
+        <div className="container opportunity-grid" data-reveal-stagger>
           {events.map((event) => (
             <article className="opportunity-card" key={event.id}>
               <span className="tag">{event.type}</span>
-              <h3 style={{ marginTop: 18 }}>{event.title}</h3>
+              <h3>{event.title}</h3>
               <p>{event.summary}</p>
               <div className="opportunity-details">
                 <span>

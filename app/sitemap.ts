@@ -9,10 +9,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/start",
     "/how-it-works",
     "/mavericks",
+    "/mxm",
     "/impact",
+    "/gallery",
     "/about",
     "/trust-and-safety",
     "/stories",
+    "/blog",
+    "/subscribe",
+    "/settings",
+    "/ai-agent",
     "/partners",
     "/events",
     "/faq",
@@ -22,6 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/refunds",
   ];
   const campaigns = await listCampaigns();
+  const { stories } = await import("@/lib/data");
 
   return [
     ...staticRoutes.map((route) => ({
@@ -37,6 +44,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ),
       changeFrequency: "weekly" as const,
       priority: 0.8,
+    })),
+    ...stories.map((story) => ({
+      url: `${base}/blog/${story.slug}`,
+      lastModified: new Date(story.date),
+      changeFrequency: "monthly" as const,
+      priority: 0.65,
     })),
   ];
 }

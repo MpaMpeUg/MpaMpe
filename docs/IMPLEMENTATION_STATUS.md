@@ -1,6 +1,6 @@
 # MpaMpe Implementation Status
 
-Updated: 22 June 2026
+Updated: 16 November 2026
 
 ## Completed in the platform rebuild
 
@@ -11,25 +11,50 @@ Updated: 22 June 2026
 - Homepage and reusable site navigation/footer
 - Campaign directory with search, category filtering and sorting
 - Dynamic campaign detail pages with budget and update data
-- Donation interface with safe demo mode
+- Donation interface with safe demo mode, anonymous giving, optional MpaMpe tips,
+  MTN/Airtel Mobile Money network capture and pledge capture
+- Public campaign progress line and confirmed backers section
 - Start-a-campaign application
 - Mavericks volunteer community page, roles, opportunities and application
-- About, How It Works, Impact, Trust & Safety, Stories, Partners, Events, FAQ,
-  Contact, Privacy, Terms and Refunds pages
+- About, How It Works, Impact, Trust & Safety, Stories, Blog, Subscribe,
+  MpaMpe AI Agent, Partners, Events, FAQ, Contact, Privacy, Terms and Refunds
+  pages
 - Contact and newsletter processing
-- User dashboard and Netlify Identity integration
-- Administrator role checks and admin API
-- PostgreSQL schema and database fallback repository
-- Payment initiation, event storage and signed webhook framework
+- Dynamic creator dashboard with application status, submitted documents,
+  campaign progress, privacy-safe supporters, CSV reporting, six-month giving
+  visuals, campaign insights, campaign editing and campaign update
+  publishing/removal
+- Approved-campaign public/private visibility controls, rotating secure share
+  links, unlisted private campaign access and token-aware donations/pledges
+- Profile-backed settings and Supabase Auth session refresh
+- Administrator role checks using server-controlled Supabase app metadata
+- Admin operations dashboard with application approval-to-publication, campaign
+  status control, user-role management and operational data tables
+- MxM 2026 public campaign, embedded registration form and optimized 2025
+  mission gallery
+- Global success/error/info toast notifications for platform forms and actions
+- Active Supabase schema, RLS policies, Auth profile trigger and Storage buckets
+- Payment initiation, event storage, Flutterwave Uganda Mobile Money payloads
+  and signed webhook framework
 - Sitemap, robots, metadata, responsive behavior and reduced-motion support
 
 ## Verified
 
 - `npm run typecheck`
 - `npm run lint`
+- `npm test`
 - `npm run build`
 - Desktop homepage and campaign visual review
 - Mobile homepage and navigation review at 390 × 844
+- Responsive campaign, MxM and Gallery review with no horizontal overflow or
+  broken images
+- Production-mode route timing check; known campaign details are pre-rendered
+  with five-minute revalidation
+- Supabase health, security and performance advisor review after admin-policy
+  migrations
+- Creator ownership and cross-owner denial checks in rollback-only Supabase
+  transactions
+- Authenticated creator dashboard rendering and campaign/update mutation routes
 - Campaign search interaction
 - Contact form success only after server response
 - Newsletter API response
@@ -38,24 +63,31 @@ Updated: 22 June 2026
 
 ## Requires external decisions or credentials
 
-1. **Database provider**
-   - Recommended: managed PostgreSQL.
-   - Apply `database/schema.sql`.
-   - Set `DATABASE_URL`.
+1. **Database operations**
+   - Supabase/Postgres is active and the reviewed migrations are applied.
+   - The organizer-insights and private-campaign migrations are ready locally;
+     install them when the Supabase management connection is restored. The
+     dashboard uses a safe campaign/backer fallback until then, while private
+     campaign switching remains disabled until its security migration exists.
+   - Configure the same public Supabase variables in Netlify before preview.
+   - Verify backups and Auth confirmation-email delivery with an approved test
+     address.
 
 2. **Payment provider**
-   - Confirm the funds custody and settlement model.
-   - Select an approved provider supporting the required Mobile Money and card
-     methods.
+   - Funds custody model confirmed: donations settle into a MpaMpe-controlled
+     merchant account first.
+   - Recommended first adapter: Flutterwave Uganda Mobile Money for MTN/Airtel.
    - Obtain sandbox and production credentials.
+   - Set `PAYMENT_PROVIDER=flutterwave`, `PAYMENT_SECRET_KEY` and
+     `PAYMENT_WEBHOOK_SECRET`.
 
 3. **Email provider**
    - Configure transactional email for receipts, application status and support.
 
 4. **Identity settings**
-   - Enable Netlify Identity.
-   - Decide whether registration is open or invite-only.
-   - Assign administrator roles through controlled server-side processes.
+   - Enable Supabase Auth email/password signups and confirmation email.
+   - Decide whether organizer registration is open or invite-only.
+   - Assign administrator roles through controlled Supabase metadata processes.
 
 5. **Legal and operational approval**
    - Privacy, terms, refunds, campaign eligibility, fees, payouts, data

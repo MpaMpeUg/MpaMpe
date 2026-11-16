@@ -55,16 +55,16 @@ export default function TrustPage() {
     <>
       <PageHero
         eyebrow="Trust & safety"
-        title="Trust is a process, not a badge."
-        description="MpaMpe combines human review, technical controls and clear reporting to reduce risk while keeping community giving accessible."
+        title="How MpaMpe reviews campaigns and payments."
+        description="Read the controls used for campaign review, payment confirmation, privacy, safeguarding and reports."
       />
       <section className="section">
         <div className="container">
           <SectionHeading
             eyebrow="Platform controls"
-            title="What MpaMpe is building into every campaign journey."
+            title="Controls used across the platform."
           />
-          <div className="value-grid">
+          <div className="value-grid" data-reveal-stagger>
             {controls.map(({ icon: Icon, title, text }) => (
               <article className="value-card" key={title}>
                 <Icon />
@@ -76,7 +76,7 @@ export default function TrustPage() {
         </div>
       </section>
       <section className="section section-muted">
-        <div className="container legal">
+        <div className="container legal" data-reveal>
           <h2>What campaign review means</h2>
           <p>
             Review means MpaMpe has assessed the information required for the

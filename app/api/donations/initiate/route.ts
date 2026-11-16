@@ -1,6 +1,7 @@
 import { clientIp, jsonError, validationMessage } from "@/lib/http";
 import { initiatePayment } from "@/lib/payments";
 import { rateLimit } from "@/lib/rate-limit";
+import { getCampaign } from "@/lib/repository";
 import { donationSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
@@ -12,6 +13,14 @@ export async function POST(request: Request) {
   try {
     const parsed = donationSchema.safeParse(await request.json());
     if (!parsed.success) return jsonError(validationMessage(parsed.error));
+    const campaign = await getCampaign(
+      parsed.data.campaignSlug,
+      parsed.data.campaignAccessToken,
+    );
+    if (!campaign) return jsonError("Campaign was not found.", 404);
+    if (!(["active", "funded"] as string[]).includes(campaign.status)) {
+      return jsonError("This campaign is not accepting donations.", 409);
+    }
     const payment = await initiatePayment(parsed.data);
     return Response.json(payment, { status: 201 });
   } catch (error) {

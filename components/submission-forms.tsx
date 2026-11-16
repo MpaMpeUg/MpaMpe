@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useId, useState } from "react";
+import { useToast } from "@/components/toast-provider";
 
 type FormState = {
   status: "idle" | "submitting" | "success" | "error";
@@ -33,7 +34,9 @@ function FormNotice({ state }: { state: FormState }) {
 }
 
 export function NewsletterForm() {
+  const toast = useToast();
   const [state, setState] = useState<FormState>(initialState);
+  const emailId = `newsletter-email-${useId().replaceAll(":", "")}`;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -50,21 +53,24 @@ export function NewsletterForm() {
         status: "success",
         message: result.message || "You are subscribed.",
       });
+      toast({ title: "Subscribed", message: result.message, tone: "success" });
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Please try again.";
       setState({
         status: "error",
-        message: error instanceof Error ? error.message : "Please try again.",
+        message,
       });
+      toast({ title: "Subscription failed", message, tone: "error" });
     }
   }
 
   return (
     <form className="newsletter-form" onSubmit={handleSubmit}>
-      <label className="sr-only" htmlFor="newsletter-email">
+      <label className="sr-only" htmlFor={emailId}>
         Email address
       </label>
       <input
-        id="newsletter-email"
+        id={emailId}
         name="email"
         type="email"
         placeholder="Email address"
@@ -87,6 +93,7 @@ export function NewsletterForm() {
 }
 
 export function ContactForm() {
+  const toast = useToast();
   const [state, setState] = useState<FormState>(initialState);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -103,11 +110,14 @@ export function ContactForm() {
           result.message ||
           "Message received. The MpaMpe team will respond shortly.",
       });
+      toast({ title: "Message received", message: result.message, tone: "success" });
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Please try again.";
       setState({
         status: "error",
-        message: error instanceof Error ? error.message : "Please try again.",
+        message,
       });
+      toast({ title: "Message not sent", message, tone: "error" });
     }
   }
 
@@ -161,6 +171,7 @@ export function ContactForm() {
 }
 
 export function MaverickApplicationForm() {
+  const toast = useToast();
   const [state, setState] = useState<FormState>(initialState);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -187,11 +198,14 @@ export function MaverickApplicationForm() {
           result.message ||
           "Application received. We will share orientation details after review.",
       });
+      toast({ title: "Application received", message: result.message, tone: "success" });
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Please try again.";
       setState({
         status: "error",
-        message: error instanceof Error ? error.message : "Please try again.",
+        message,
       });
+      toast({ title: "Application not sent", message, tone: "error" });
     }
   }
 

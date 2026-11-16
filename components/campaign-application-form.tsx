@@ -1,8 +1,13 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import Link from "next/link";
+import { FormEvent, useMemo, useState } from "react";
+import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import { useToast } from "@/components/toast-provider";
 
 export function CampaignApplicationForm() {
+  const toast = useToast();
+  const supabase = useMemo(() => createBrowserSupabaseClient(), []);
   const [status, setStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
@@ -11,16 +16,64 @@ export function CampaignApplicationForm() {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const data = Object.fromEntries(new FormData(form));
+    const formData = new FormData(form);
     setStatus("submitting");
-    setMessage("Submitting your campaign for initial review…");
+    setMessage("Uploading your campaign information…");
 
     try {
+      if (!supabase) throw new Error("Supabase is not configured.");
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError || !authData.user) {
+        throw new Error("Sign in and confirm your email before submitting a campaign.");
+      }
+
+      const image = formData.get("campaignImage");
+      if (!(image instanceof File) || image.size === 0) {
+        throw new Error("Add a campaign image before submitting.");
+      }
+
+      const imageExtension = image.name.split(".").pop()?.toLowerCase() || "webp";
+      const imagePath = `${authData.user.id}/${crypto.randomUUID()}.${imageExtension}`;
+      const documents = formData
+        .getAll("documents")
+        .filter((item): item is File => item instanceof File && item.size > 0)
+        .slice(0, 5);
+      const imageUpload = supabase.storage
+        .from("campaign-images")
+        .upload(imagePath, image, { contentType: image.type, upsert: false });
+      const documentUploads = Promise.all(
+        documents.map(async (document) => {
+          const extension =
+            document.name.split(".").pop()?.toLowerCase() || "pdf";
+          const path = `${authData.user.id}/${crypto.randomUUID()}.${extension}`;
+          const { error } = await supabase.storage
+            .from("campaign-documents")
+            .upload(path, document, {
+              contentType: document.type,
+              upsert: false,
+            });
+          if (error) throw new Error(`Document upload failed: ${error.message}`);
+          return path;
+        }),
+      );
+      const [{ error: imageError }, documentPaths] = await Promise.all([
+        imageUpload,
+        documentUploads,
+      ]);
+      if (imageError) throw new Error(`Image upload failed: ${imageError.message}`);
+
+      const data = Object.fromEntries(
+        Array.from(formData.entries()).filter(
+          ([name]) => name !== "campaignImage" && name !== "documents",
+        ),
+      );
       const response = await fetch("/api/campaign-applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
+          imagePath,
+          documentPaths,
           acceptedTerms: data.acceptedTerms === "on",
         }),
       });
@@ -35,9 +88,16 @@ export function CampaignApplicationForm() {
       setMessage(
         `${result.message} Reference: ${result.reference ?? "pending"}.`,
       );
+      toast({
+        title: "Campaign submitted",
+        message: `Reference: ${result.reference ?? "pending"}`,
+        tone: "success",
+      });
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Please try again.";
       setStatus("error");
-      setMessage(error instanceof Error ? error.message : "Please try again.");
+      setMessage(errorMessage);
+      toast({ title: "Campaign submission failed", message: errorMessage, tone: "error" });
     }
   }
 
@@ -103,6 +163,28 @@ export function CampaignApplicationForm() {
           required
         />
       </label>
+      <label>
+        Campaign image
+        <input
+          name="campaignImage"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          required
+        />
+        <span className="field-help">JPG, PNG or WebP, up to 5 MB.</span>
+      </label>
+      <label>
+        Supporting documents (optional)
+        <input
+          name="documents"
+          type="file"
+          accept="application/pdf,image/jpeg,image/png,image/webp"
+          multiple
+        />
+        <span className="field-help">
+          Up to five consent, budget or verification files. These remain private.
+        </span>
+      </label>
       <label className="consent-line">
         <input name="acceptedTerms" type="checkbox" required />
         <span>
@@ -128,6 +210,9 @@ export function CampaignApplicationForm() {
           {message}
         </p>
       ) : null}
+      <p className="field-help">
+        Need an account? <Link href="/dashboard">Sign in or create one first.</Link>
+      </p>
     </form>
   );
 }

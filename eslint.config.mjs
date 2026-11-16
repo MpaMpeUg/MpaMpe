@@ -10,6 +10,9 @@ export default defineConfig([
     "node_modules/**",
     "css/**",
     "js/**",
+    "public/css/**",
+    "public/js/**",
+    "public/legacy-home/**",
     "legacy-site/**",
   ]),
 ]);

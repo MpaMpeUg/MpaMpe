@@ -1,6 +1,6 @@
 import { clientIp, jsonError, validationMessage } from "@/lib/http";
 import { rateLimit } from "@/lib/rate-limit";
-import { saveSubmission } from "@/lib/repository";
+import { saveNewsletterSubscription } from "@/lib/repository";
 import { newsletterSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const data = newsletterSchema.safeParse(await request.json());
     if (!data.success) return jsonError(validationMessage(data.error));
     if (data.data.website) return Response.json({ message: "Subscribed." });
-    await saveSubmission("newsletter", data.data);
+    await saveNewsletterSubscription(data.data.email);
     return Response.json(
       { message: "Thank you. You are on the MpaMpe update list." },
       { status: 201 },

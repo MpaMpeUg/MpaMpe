@@ -13,13 +13,17 @@ now publishes the Next.js application.
 - Searchable and filterable campaign directory
 - Dynamic campaign detail routes and campaign APIs
 - Campaign application workflow
+- Anonymous giving, optional platform tips, pledge capture and public backers
 - MpaMpe Mavericks page, opportunities and volunteer application
 - Contact and newsletter APIs with validation, honeypots and rate limits
-- Netlify Identity account and role scaffolding
-- Donor, organizer and Maverick dashboard foundation
+- Supabase Auth account signup/signin scaffolding with email confirmation copy
+- Donor, organizer, settings and Maverick dashboard foundation
 - Administrator access checks and operations preview
-- PostgreSQL schema for campaigns, submissions, donations and payment events
-- Payment initiation and signed webhook scaffolding
+- Supabase/Postgres schema for profiles, campaign applications, campaigns,
+  donations, tips, pledges, blog posts, submissions and payment events
+- Payment initiation, Flutterwave Uganda Mobile Money payloads and signed
+  webhook handling
+- Blog, subscribe and MpaMpe AI Agent concept routes
 - SEO metadata, sitemap, robots rules and social previews
 - Netlify caching, image optimization and security headers
 
@@ -40,6 +44,7 @@ Open `http://localhost:3000`.
 Quality checks:
 
 ```bash
+npm test
 npm run typecheck
 npm run lint
 npm run build
@@ -59,11 +64,14 @@ The app runs safely without a database or payment provider:
 - Public campaign pages use reviewed seed data.
 - Form submissions are held only in the running server process.
 - Donation initiation returns a clear demo response and does not transfer money.
+- Supabase signup/settings UI explains that local auth keys are missing instead
+  of crashing.
 
-For persistent production data, set `DATABASE_URL` and apply:
+For persistent data, configure the Supabase project URL and publishable key.
+The connected project already has the reviewed migration history in:
 
 ```text
-database/schema.sql
+database/migrations/
 ```
 
 ## Payment activation
@@ -75,9 +83,11 @@ Before production activation:
 
 1. Set `PAYMENT_PROVIDER`, `PAYMENT_SECRET_KEY` and
    `PAYMENT_WEBHOOK_SECRET` in Netlify.
-2. Implement the provider-specific checkout adapter in `lib/payments.ts`.
-3. Map the provider's signed webhook format in
-   `app/api/webhooks/payments/route.ts`.
+2. For Flutterwave Uganda Mobile Money, use `PAYMENT_PROVIDER=flutterwave`.
+   The donation form collects MTN/Airtel and the adapter calls Flutterwave's
+   Uganda Mobile Money charge endpoint.
+3. Configure the provider webhook URL:
+   `https://mpampe.com/api/webhooks/payments`.
 4. Test successful, failed, delayed, duplicate, reversed and refunded events.
 5. Confirm reconciliation, payout and receipt procedures.
 
@@ -103,12 +113,12 @@ npx netlify deploy
 ```
 
 Do not use `--prod` until the preview has passed content, legal, database,
-Identity and payment-provider review.
+Supabase Auth and payment-provider review.
 
 ## Production checklist
 
 - [ ] Apply the PostgreSQL schema and verify backups
-- [ ] Configure Netlify Identity and administrator roles
+- [ ] Configure Supabase Auth email confirmation and administrator roles
 - [ ] Review and approve campaign facts, totals and images
 - [ ] Complete legal review of Privacy, Terms and Refunds pages
 - [ ] Approve Mavericks code of conduct and safeguarding procedure

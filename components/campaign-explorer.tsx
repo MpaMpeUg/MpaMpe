@@ -88,8 +88,8 @@ export function CampaignExplorer({ campaigns }: { campaigns: Campaign[] }) {
       </div>
       {visible.length ? (
         <div className="campaign-grid">
-          {visible.map((campaign) => (
-            <CampaignCard campaign={campaign} key={campaign.id} />
+          {visible.map((campaign, index) => (
+            <CampaignCard campaign={campaign} key={campaign.id} priority={index === 0} />
           ))}
         </div>
       ) : (

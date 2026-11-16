@@ -3,10 +3,17 @@ import { BadgeCheck, MapPin, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BackersList } from "@/components/backers-list";
 import { DonationPanel } from "@/components/donation-panel";
+import { PledgePanel } from "@/components/pledge-panel";
 import { ShareButton } from "@/components/share-button";
 import { campaignProgress, formatDate, formatMoney } from "@/lib/format";
-import { getCampaign, listCampaigns } from "@/lib/repository";
+import { normalizeCampaignAccessToken } from "@/lib/campaign-access";
+import {
+  getCampaign,
+  listCampaignBackers,
+  listCampaigns,
+} from "@/lib/repository";
 
 export const revalidate = 300;
 
@@ -18,11 +25,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ access?: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const campaign = await getCampaign(slug);
+  const access = normalizeCampaignAccessToken((await searchParams).access);
+  const campaign = await getCampaign(slug, access);
   if (!campaign) return { title: "Campaign not found" };
   return {
     title: campaign.shortTitle,
@@ -32,17 +42,24 @@ export async function generateMetadata({
       description: campaign.summary,
       images: [campaign.image],
     },
+    robots: campaign.visibility === "private"
+      ? { index: false, follow: false, noarchive: true }
+      : undefined,
   };
 }
 
 export default async function CampaignDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ access?: string }>;
 }) {
   const { slug } = await params;
-  const campaign = await getCampaign(slug);
+  const access = normalizeCampaignAccessToken((await searchParams).access);
+  const campaign = await getCampaign(slug, access);
   if (!campaign) notFound();
+  const backers = await listCampaignBackers(campaign.slug, access);
   const progress = campaignProgress(campaign.raised, campaign.goal);
 
   return (
@@ -59,7 +76,10 @@ export default async function CampaignDetailPage({
             />
           </div>
           <div className="campaign-detail-copy">
-            <span className="eyebrow">{campaign.category}</span>
+            <div className="campaign-detail-labels">
+              <span className="eyebrow">{campaign.category}</span>
+              {campaign.visibility === "private" ? <span className="private-campaign-badge">Private campaign</span> : null}
+            </div>
             <h1>{campaign.title}</h1>
             <p>{campaign.summary}</p>
             <div className="campaign-detail-meta">
@@ -89,6 +109,10 @@ export default async function CampaignDetailPage({
               >
                 <span style={{ width: `${progress}%` }} />
               </div>
+              <p className="progress-caption">
+                {campaign.supporters} confirmed backers · live progress updates
+                after verified payment callbacks
+              </p>
             </div>
             <div className="hero-actions">
               <a className="button" href="#donate">
@@ -142,6 +166,19 @@ export default async function CampaignDetailPage({
               ))}
             </ul>
 
+            <h2>Recent backers</h2>
+            <BackersList backers={backers} />
+
+            <h2>Pledges and follow-ups</h2>
+            <div className="info-card">
+              <h3>Pledge details stay private</h3>
+              <p>
+                Pledges are optional follow-up records for the MpaMpe team. They
+                do not count toward the public campaign total until a payment is
+                confirmed.
+              </p>
+            </div>
+
             <h2>Need help?</h2>
             <p>
               Contact MpaMpe before donating if you need clarification about
@@ -157,6 +194,12 @@ export default async function CampaignDetailPage({
             <DonationPanel
               campaignSlug={campaign.slug}
               campaignTitle={campaign.title}
+              campaignAccessToken={access}
+            />
+            <PledgePanel
+              campaignSlug={campaign.slug}
+              campaignTitle={campaign.title}
+              campaignAccessToken={access}
             />
           </div>
         </div>
