@@ -131,7 +131,6 @@ export const maverickOpportunities: MaverickOpportunity[] = [
     type: "Digital advocacy",
     location: "Remote / Uganda",
     commitment: "2–4 hours weekly",
-    closingDate: "2026-08-15",
     spaces: 25,
     summary:
       "Share approved campaign content and help verified stories reach supportive communities.",
@@ -143,7 +142,6 @@ export const maverickOpportunities: MaverickOpportunity[] = [
     type: "Creative",
     location: "Kampala",
     commitment: "Two field sessions monthly",
-    closingDate: "2026-08-30",
     spaces: 8,
     summary:
       "Support consent-led interviews, photography, video and campaign updates.",
@@ -155,7 +153,6 @@ export const maverickOpportunities: MaverickOpportunity[] = [
     type: "Technology",
     location: "Remote",
     commitment: "Flexible project work",
-    closingDate: "2026-09-15",
     spaces: 10,
     summary:
       "Test the MpaMpe platform, improve data quality and support digital literacy.",
@@ -166,15 +163,15 @@ export const maverickOpportunities: MaverickOpportunity[] = [
 export const stories: Story[] = [
   {
     slug: "oscar-tuition-campaign",
-    title: "Eight days of giving: how Oscar's tuition goal was reached",
+    title: "Eight days, one shared goal: Oscar returned to class",
     excerpt:
-      "MpaMpe's 2023 pilot brought the Makerere community together to raise UGX 3.5 million for Oscar Nigyema's tuition.",
+      "A clear need and a generous Makerere community raised Oscar Nigyema's UGX 3.5 million tuition goal in eight days.",
     body: [
-      "Oscar Nigyema was pursuing an Economics degree at Makerere University when tuition pressure threatened to interrupt his studies.",
-      "The campaign set a clear UGX 3.5 million goal and invited the university community to rally around a specific, verified need. Eight days later, the full target had been raised by 87 supporters.",
-      "Oscar's campaign became MpaMpe's first major proof that trusted digital storytelling can turn a community's care into practical support. It also shaped the platform's approach to campaign review, budgeting and transparent updates.",
+      "Oscar Nigyema was studying Economics at Makerere University when an unpaid tuition balance put his semester at risk. The need was urgent, specific and possible to solve together.",
+      "MpaMpe worked with Oscar to present a clear UGX 3.5 million target and mobilise the university community. Eight days later, 87 supporters had funded the full amount.",
+      "The campaign showed what transparent storytelling and a focused goal can do. It also helped shape MpaMpe's approach to campaign review, clear budgets and updates that keep supporters informed.",
     ],
-    image: "/images/campaign-oscar.webp",
+    image: "/images/campaign-oscar-actual.webp",
     date: "2023-10-18",
     category: "Education campaign",
     sourceHref: "https://www.youtube.com/watch?v=fbus6frL04Q",
@@ -182,15 +179,15 @@ export const stories: Story[] = [
   },
   {
     slug: "joel-heart-surgery",
-    title: "10 Hearts for Joel: a community helped make surgery possible",
+    title: "10 Hearts for Joel: support that helped make surgery possible",
     excerpt:
-      "The MpaMpe community raised UGX 20,260,500 before Joel Mugisha's successful heart surgery.",
+      "Supporters raised UGX 20,260,500 toward Joel Mugisha's heart surgery, bringing urgent care within reach.",
     body: [
-      "Joel Mugisha, a mechanical engineering student, needed urgent specialist care for a serious heart condition. His family and university community needed a trusted way to coordinate support.",
-      "Through the 10 Hearts for Joel campaign, supporters shared Joel's story, contributed and kept the appeal moving. Before surgery began, the community had raised UGX 20,260,500 toward the UGX 25 million goal.",
-      "Joel later shared his gratitude after a successful surgery. MpaMpe also recognised the Mulago Heart Institute and friends who helped subsidise and clear the remaining balance.",
+      "Joel Mugisha, a mechanical engineering student, needed specialist treatment for a serious heart condition. His family and university community needed one trusted place to coordinate help.",
+      "Through 10 Hearts for Joel, supporters contributed, shared the appeal and kept its progress visible. By the time surgery began, the community had raised UGX 20,260,500 toward the UGX 25 million target.",
+      "Joel's surgery was successful. The result belonged to everyone who gave, amplified the campaign and helped close the remaining gap, including the team at the Mulago Heart Institute.",
     ],
-    image: "/images/campaign-joel.webp",
+    image: "/images/campaign-joel-actual.webp",
     date: "2024-11-20",
     category: "Medical campaign",
     sourceHref:
@@ -241,7 +238,7 @@ export const impactStats = [
   { value: "3", label: "flagship campaigns delivered" },
   { value: "500+", label: "people mobilised to give" },
   { value: "UGX 30M+", label: "community support coordinated" },
-  { value: "1", label: "growing Mavericks community" },
+  { value: "35", label: "Mavericks community members" },
 ];
 
 export const mxmGalleryImages = [

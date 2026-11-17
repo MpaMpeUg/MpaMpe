@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Compass, HandHeart, ShieldCheck, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { FounderCards } from "@/components/founder-cards";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/section-heading";
 
@@ -94,27 +95,11 @@ export default function AboutPage() {
       <section className="section">
         <div className="container">
           <SectionHeading
-            eyebrow="Leadership"
-            title="A team growing with the mission."
-            description="MpaMpe combines community organizing, campaign support, technology and partnership development."
+            eyebrow="Meet the founders"
+            title="The people building MpaMpe."
+            description="Three founders bringing together community leadership, technology and storytelling. Select a card to learn more."
           />
-          <div className="team-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-            {[
-              ["/images/team-1.webp", "MpaMpe Leadership", "Strategy & partnerships"],
-              ["/images/team-2.webp", "Campaign Operations", "Campaign & community support"],
-              ["/images/team-3.webp", "Mavericks Community", "Volunteers & outreach"],
-            ].map(([image, name, role]) => (
-              <article className="person-card" key={name}>
-                <div style={{ position: "relative", height: 320 }}>
-                  <Image src={image} alt="" fill sizes="33vw" />
-                </div>
-                <div className="story-content">
-                  <h3>{name}</h3>
-                  <p>{role}</p>
-                </div>
-              </article>
-            ))}
-          </div>
+          <FounderCards />
         </div>
       </section>
     </>

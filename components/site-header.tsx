@@ -20,6 +20,7 @@ export const moreNavigation = [
   { href: "/blog", label: "Blog" },
   { href: "/stories", label: "Stories" },
   { href: "/impact", label: "Impact" },
+  { href: "/awards", label: "Awards & Recognition" },
   { href: "/gallery", label: "Gallery" },
   { href: "/events", label: "Events" },
   { href: "/partners", label: "Partners" },

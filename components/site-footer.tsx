@@ -15,6 +15,7 @@ const explore = [
   ["/start", "Start a campaign"],
   ["/how-it-works", "How it works"],
   ["/impact", "Our impact"],
+  ["/awards", "Awards & recognition"],
   ["/stories", "Stories & updates"],
 ];
 

@@ -67,7 +67,6 @@ export type MaverickOpportunity = {
   type: string;
   location: string;
   commitment: string;
-  closingDate: string;
   spaces: number;
   summary: string;
   skills: string[];

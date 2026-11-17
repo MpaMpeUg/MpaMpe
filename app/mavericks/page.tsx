@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {
   Award,
   CalendarDays,
+  CircleCheck,
   Clock3,
   Code2,
   GraduationCap,
@@ -17,7 +18,6 @@ import { MaverickApplicationForm } from "@/components/submission-forms";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/section-heading";
 import { maverickOpportunities } from "@/lib/data";
-import { formatDate } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "MpaMpe Mavericks",
@@ -162,7 +162,7 @@ export default function MavericksPage() {
           <SectionHeading
             eyebrow="Open opportunities"
             title="Find a role that fits your skills and availability."
-            description="These opportunities are the first community roles in the new Mavericks programme."
+            description="Expressions of interest remain open. Choose a role and we will match you when a suitable assignment is available."
           />
           <div className="opportunity-grid">
             {maverickOpportunities.map((opportunity) => (
@@ -181,8 +181,7 @@ export default function MavericksPage() {
                     <Clock3 /> {opportunity.commitment}
                   </span>
                   <span>
-                    <CalendarDays /> Apply by{" "}
-                    {formatDate(opportunity.closingDate)}
+                    <CircleCheck /> Open year-round
                   </span>
                 </div>
                 <a className="card-link" href="#apply">
